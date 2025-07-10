@@ -1,0 +1,27 @@
+# from pydantic import BaseModel
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from app.routes import gateway
+from app.core.settings import settings
+import uvicorn
+
+app = FastAPI()
+
+#predicates = [r["predicate"].replace("**", "") for r in routes]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Allows all origins
+    allow_methods=["*"],  # Allows all methods (GET, POST, etc.)
+    allow_headers=["*"],  # Allows all headers
+)
+
+app.include_router(gateway.router, tags=["gateway"])
+
+@app.get("/")
+async def root():
+    return {"message": "Hello World"}
+
+
+if __name__ == "__main__":
+    uvicorn.run(app, host=settings.HOSTNAME, port=settings.SERVER_PORT)

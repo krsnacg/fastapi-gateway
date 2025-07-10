@@ -1,0 +1,18 @@
+routes:
+  - id: user-service
+    uri: http://localhost:8090
+    predicate: /api/v1/users/**
+    auth-required: false
+
+  - id: microservice-2
+    uri: http://10.12.18.3:port2
+    predicate: /api/v1/microservice-2/**
+    auth-required: true
+
+  - id: microservice-3
+    uri: http://10.12.18.4:port3
+    predicate: /api/v1/microservice-3/**
+    auth-required: true
+
+server:
+  port: 8090
