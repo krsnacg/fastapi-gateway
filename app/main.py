@@ -2,8 +2,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.routes import gateway
-from app.core.settings import settings
-import uvicorn
 
 app = FastAPI(openapi_url=None)
 
