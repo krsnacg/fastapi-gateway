@@ -21,7 +21,3 @@ app.include_router(gateway.router, tags=["gateway"])
 @app.get("/")
 async def root():
     return {"message": "Hello World"}
-
-
-if __name__ == "__main__":
-    uvicorn.run(app, host=settings.HOSTNAME, port=settings.SERVER_PORT)
