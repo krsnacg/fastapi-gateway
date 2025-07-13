@@ -1,5 +1,4 @@
 import yaml
-import json
 from app.models import ConfigRoute
 from typing import Any
 
@@ -10,7 +9,7 @@ def parse_cors(v: Any) -> list[str] | str:
         return v
     raise ValueError(v)
 
-def load_routes_config(path: str = "../configuration/routes.yml") -> list[ConfigRoute]:
+def load_routes_config(path: str = "./configuration/routes.yml") -> list[ConfigRoute]:
     """
     Load the routes configuration from a YAML file.
         
@@ -30,11 +29,25 @@ def load_routes_config(path: str = "../configuration/routes.yml") -> list[Config
             
     return config_list
 
-def load_port_config(path: str = "../configuration/routes.yml") -> int:
+def load_port_config(path: str = "./configuration/routes.yml") -> int:
         """
         Load the port configuration
         """
         with open(path, "r") as stream:
-            config = json.load(stream)
+            config = yaml.safe_load(stream)
         
         return config.get("server.port", 8000)  # Default to 8000 if not specified
+    
+    
+def find_matching_route(path_route: str, routes: list[ConfigRoute]) -> ConfigRoute | None:
+    """
+    Find the first route that matches the given path.
+    
+    :param path_route: The path to match against the routes.
+    :param routes: List of ConfigRoute objects to search in.
+    :return: The first matching ConfigRoute object or None if no match is found.
+    """
+    for route in routes:
+        if path_route.startswith(route.predicate):
+            return route
+    return None
