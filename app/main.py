@@ -5,7 +5,7 @@ from app.routes import gateway
 from app.core.settings import settings
 import uvicorn
 
-app = FastAPI()
+app = FastAPI(openapi_url=None)
 
 #predicates = [r["predicate"].replace("**", "") for r in routes]
 

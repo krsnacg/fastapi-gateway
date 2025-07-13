@@ -42,27 +42,3 @@ async def forward_request(request: Request, target_url: str, user_id: str | None
             detail=f"Error forwarding request to backend: {exc}"
         )
         
-async def proxy_request(request: Request, user_id: str | None = None):
-    print(request.url.path)
-    full_path = "/" + request.url.path
-    
-    config_route = None
-    
-    for r in settings.ROUTES:
-        auth_should_match = (user_id is not None)
-        
-        if full_path.startswith(r.predicate) and r.auth_required == auth_should_match:
-            config_route = r
-            break
-        
-    if not config_route:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="No matching route found for the given path"
-        )
-        
-    service_uri = config_route.uri
-    suffix = full_path[len(config_route.predicate):]
-    target_url = f"{service_uri}/{suffix}"
-        
-    return await forward_request(request, target_url, user_id)
