@@ -46,7 +46,7 @@ async def catch_all(request: Request, path_route: str):
     print(f"Service URI for matched predicate: {service_uri}")
     
     # Check if the route requires authentication
-    if config_route.auth_required:
+    if config_route.auth_required or suffix == "users/me":
         # Here you would typically check for authentication
         # For example, you might check for a valid token in the headers
         user_id = await verify_authentication(request)
