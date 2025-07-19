@@ -14,6 +14,7 @@ async def forward_request(request: Request, target_url: str, user_id: str | None
             ## Can add roles or other user info if needed
             
         async with httpx.AsyncClient() as client:
+            print(f"Forwarding request to {target_url} with headers: {forward_headers}")
             response = await client.request(
                 method=request.method,
                 url=target_url,

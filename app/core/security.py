@@ -28,6 +28,7 @@ async def verify_authentication(request: Request) -> str:
     try:
         token = request.headers.get("Authorization")
         if not token:
+            print("Could not find Authorization header in request")
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="Authorization token not provided",
