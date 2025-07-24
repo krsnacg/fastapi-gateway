@@ -2,12 +2,14 @@ import httpx
 from fastapi import Response, Request, HTTPException, status
 from ..core.settings import settings
 
-async def forward_request(request: Request, target_url: str, user_id: str | None) -> Response:
+async def forward_request(request: Request, target_url: str, user_id: str | None, host: str) -> Response:
     try:
         forward_headers = dict(request.headers)
+        # forward_headers["Accept"] = "application/json"
+        forward_headers["host"] = host.replace("https://", "")
         
         if "authorization" in request.headers:
-            del forward_headers["authorization"]
+            del forward_headers["Authorization"]
         
         if user_id:
             forward_headers["X-User-ID"] = str(user_id)
@@ -24,16 +26,16 @@ async def forward_request(request: Request, target_url: str, user_id: str | None
                 timeout=10
             )
             # Filtra headers que no deberían pasarse de vuelta al cliente
-            excluded_headers = {"content-encoding", "content-length", "transfer-encoding", "connection"}
-            response_headers = {
-                name: value for name, value in response.headers.items()
-                if name.lower() not in excluded_headers
-            }
+            #excluded_headers = {"content-encoding", "content-length", "transfer-encoding", "connection"}
+            #response_headers = {
+            #    name: value for name, value in response.headers.items()
+            #    if name.lower() not in excluded_headers
+            #}
 
             return Response(
                 content=response.content,
                 status_code=response.status_code,
-                headers=response_headers,#dict(response.headers),
+                headers=dict(response.headers),
                 media_type=response.headers.get("content-type", "application/json")
             )
 
