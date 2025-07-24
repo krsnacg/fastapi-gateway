@@ -1,7 +1,8 @@
 # from pydantic import BaseModel
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.routes import gateway
+from app.routes import gateway, dashboard
+from app.core.logging import RequestLogger
 
 app = FastAPI(openapi_url=None)
 
@@ -13,7 +14,8 @@ app.add_middleware(
     allow_methods=["*"],  # Allows all methods (GET, POST, etc.)
     allow_headers=["*"],  # Allows all headers
 )
-
+app.add_middleware(RequestLogger)
+#app.include_router(dashboard.router, tags=["dashboard"])
 app.include_router(gateway.router, tags=["gateway"])
 
 @app.get("/")
