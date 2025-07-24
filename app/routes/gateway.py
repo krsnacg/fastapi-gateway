@@ -31,6 +31,8 @@ async def catch_all(request: Request, path_route: str):
     # Here you would typically determine which service to call based on the predicate
     
     suffix = path_route[len(config_route.predicate):]
+    suffix = suffix.replace(config_route.id, "")
+        
     print(f"Suffix after predicate match: {suffix}")
     
     # Get the service URI from the routes configuration
@@ -46,7 +48,7 @@ async def catch_all(request: Request, path_route: str):
     print(f"Service URI for matched predicate: {service_uri}")
     
     # Check if the route requires authentication
-    if config_route.auth_required or suffix == "users/me":
+    if config_route.auth_required: #or suffix == "users/me":
         # Here you would typically check for authentication
         # For example, you might check for a valid token in the headers
         user_id = await verify_authentication(request)
@@ -56,7 +58,7 @@ async def catch_all(request: Request, path_route: str):
     
     # Here you would typically make an asynchronous HTTP request to the service
     
-    return await forward_request(request, f"{service_uri}/{suffix}", user_id)
+    return await forward_request(request, f"{service_uri}/{suffix}", user_id, config_route.uri)
     
     ## This should wait for the service to respond and return the response (not locking other possible requests)
     

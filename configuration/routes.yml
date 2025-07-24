@@ -1,18 +1,23 @@
 routes:
-  - id: user-service
-    uri: http://localhost:8090
-    predicate: /api/v1/users/**
+  - id: auth-service
+    uri: https://auth-service-ucv6.onrender.com
+    predicate: /auth_service/**
     auth-required: false
 
-  - id: microservice-2
-    uri: http://10.12.18.3:port2
-    predicate: /api/v1/microservice-2/**
-    auth-required: true
+  - id: cuento-service
+    uri: https://question-service-0pg5.onrender.com
+    predicate: /cuento_service/**
+    auth-required: false
 
-  - id: microservice-3
-    uri: http://10.12.18.4:port3
-    predicate: /api/v1/microservice-3/**
-    auth-required: true
+  - id: question-service
+    uri: https://question-service-ilm4.onrender.com
+    predicate: /question_service/**
+    auth-required: false
+    
+  - id: responder-service
+    uri: https://response-service-ph8t.onrender.com
+    predicate: /responder_service/**
+    auth-required: false
 
 server:
   port: 8090

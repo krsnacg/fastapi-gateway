@@ -25,6 +25,7 @@ def load_routes_config(path: str = "./configuration/routes.yml") -> list[ConfigR
         # Convert each route to a ConfigRoute object
         route["auth_required"] = (route.pop("auth-required", False) if "auth-required" in route else False)
         route["predicate"] = route["predicate"].replace("**", "")
+        route["id"] = route["id"].replace("-", "_") # Ensure URI does not end with a slash
         config_list.append(ConfigRoute(**route))
             
     return config_list
